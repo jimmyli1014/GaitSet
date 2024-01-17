@@ -2,6 +2,8 @@ from datetime import datetime
 import numpy as np
 import argparse
 
+from numpy import ndarray
+
 from model.initialization import initialization
 from model.utils import evaluation
 from config import conf
@@ -51,9 +53,10 @@ print('Evaluation complete. Cost:', datetime.now() - time)
 for i in range(1):
     print('===Rank-%d (Include identical-view cases)===' % (i + 1))
     print('NM: %.3f,\tBG: %.3f,\tCL: %.3f' % (
-        np.mean(acc[0, :, :, i]),
-        np.mean(acc[1, :, :, i]),
-        np.mean(acc[2, :, :, i])))
+        ndarray.mean(acc[0, :, :, i]),
+        ndarray.mean(acc[1, :, :, i]),
+        ndarray.mean(acc[2, :, :, i])
+    ))
 
 # Print rank-1 accuracy of the best model，excluding identical-view cases
 # e.g.

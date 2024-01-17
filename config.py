@@ -20,7 +20,7 @@ conf = {
         'restore_iter': 0,
         'total_iter': 80000,
         'margin': 0.2,
-        'num_workers': 3,
+        'num_workers': 0,
         'frame_num': 30,
         'model_name': 'GaitSet',
     },

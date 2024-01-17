@@ -2,6 +2,7 @@
 # @Author  : admin
 # @Time    : 2018/11/15
 import os
+from os.path import dirname, abspath
 from copy import deepcopy
 
 import numpy as np
@@ -32,7 +33,7 @@ def initialize_model(config, train_source, test_source):
     model_param['test_source'] = test_source
     model_param['train_pid_num'] = data_config['pid_num']
     batch_size = int(np.prod(model_config['batch_size']))
-    model_param['save_name'] = '_'.join(map(str,[
+    model_param['save_name'] = '_'.join(map(str, [
         model_config['model_name'],
         data_config['dataset'],
         data_config['pid_num'],
@@ -52,7 +53,8 @@ def initialize_model(config, train_source, test_source):
 def initialization(config, train=False, test=False):
     print("Initialzing...")
     WORK_PATH = config['WORK_PATH']
-    os.chdir(WORK_PATH)
+    path = abspath(dirname(dirname(__file__)) + WORK_PATH)
+    os.chdir(path)
     os.environ["CUDA_VISIBLE_DEVICES"] = config["CUDA_VISIBLE_DEVICES"]
     train_source, test_source = initialize_data(config, train, test)
     return initialize_model(config, train_source, test_source)

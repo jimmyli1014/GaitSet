@@ -158,13 +158,15 @@ class Model:
 
             feature, label_prob = self.encoder(*seq, batch_frame)
 
-            target_label = [train_label_set.index(l) for l in label]
+            target_label = [train_label_set.index(j) for j in label]
             target_label = self.np2var(np.array(target_label)).long()
 
             triplet_feature = feature.permute(1, 0, 2).contiguous()
             triplet_label = target_label.unsqueeze(0).repeat(triplet_feature.size(0), 1)
             (full_loss_metric, hard_loss_metric, mean_dist, full_loss_num
              ) = self.triplet_loss(triplet_feature, triplet_label)
+
+            loss = 0.
             if self.hard_or_full_trip == 'hard':
                 loss = hard_loss_metric.mean()
             elif self.hard_or_full_trip == 'full':
@@ -212,7 +214,8 @@ class Model:
             if self.restore_iter == self.total_iter:
                 break
 
-    def ts2var(self, x):
+    @staticmethod
+    def ts2var(x):
         return autograd.Variable(x).cuda()
 
     def np2var(self, x):
