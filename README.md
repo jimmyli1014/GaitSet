@@ -29,22 +29,17 @@ and average 70 frames per sequence.
 The code and checkpoint for OUMVLP dataset have been released.
 See [OUMVLP](#oumvlp) for details.
 
-## Prerequisites
-
-- Python 3.6
-- PyTorch 0.4+
-- GPU
-
-
 ## Getting started
 ### Installation
 
-- (Not necessary) Install [Anaconda3](https://www.anaconda.com/download/)
-- Install [CUDA 9.0](https://developer.nvidia.com/cuda-90-download-archive)
-- install [cuDNN7.0](https://developer.nvidia.com/cudnn)
-- Install [PyTorch](http://pytorch.org/)
+1. Install Pytorch: Note that you need to install the specified version to use CUDA. See https://pytorch.org/get-started/locally/
 
-Noted that our code is tested based on [PyTorch 0.4](http://pytorch.org/)
+&emsp;&emsp;Original code is tested on version 0.4, and this fork is tested on new version 2.1.2
+
+2. Install Required Packages: NumPy, Scipy, OpenCV-Python, XArray. Or you can run
+```
+pip install -r requirements.txt
+``` 
 
 ### Dataset & Preparation
 Download [CASIA-B Dataset](http://www.cbsr.ia.ac.cn/english/Gait%20Databases.asp)
