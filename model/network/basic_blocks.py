@@ -1,6 +1,6 @@
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
 
 class BasicConv2d(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, **kwargs):
@@ -19,10 +19,11 @@ class SetBlock(nn.Module):
         self.pooling = pooling
         if pooling:
             self.pool2d = nn.MaxPool2d(2)
+
     def forward(self, x):
         n, s, c, h, w = x.size()
-        x = self.forward_block(x.view(-1,c,h,w))
+        x = self.forward_block(x.view(-1, c, h, w))
         if self.pooling:
             x = self.pool2d(x)
         _, c, h, w = x.size()
-        return x.view(n, s, c, h ,w)
+        return x.view(n, s, c, h, w)

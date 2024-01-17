@@ -19,7 +19,7 @@ def evaluation(data, config):
     view_list = list(set(view))
     view_list.sort()
     view_num = len(view_list)
-    sample_num = len(feature)
+    # sample_num = len(feature)
 
     probe_seq_dict = {'CASIA': [['nm-05', 'nm-06'], ['bg-01', 'bg-02'], ['cl-01', 'cl-02']],
                       'OUMVLP': [['00']]}

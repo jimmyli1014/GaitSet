@@ -2,7 +2,6 @@ import torch.utils.data as tordata
 import numpy as np
 import os.path as osp
 import os
-import pickle
 import cv2
 import xarray as xr
 

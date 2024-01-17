@@ -4,11 +4,12 @@ import random
 
 class TripletSampler(tordata.sampler.Sampler):
     def __init__(self, dataset, batch_size):
+        super().__init__()
         self.dataset = dataset
         self.batch_size = batch_size
 
     def __iter__(self):
-        while (True):
+        while True:
             sample_indices = list()
             pid_list = random.sample(
                 list(self.dataset.label_set),

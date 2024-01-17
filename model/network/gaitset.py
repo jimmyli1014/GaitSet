@@ -83,7 +83,7 @@ class SetNet(nn.Module):
             if frame_sum < silho.size(1):
                 silho = silho[:, :frame_sum, :, :]
             self.batch_frame = [0] + np.cumsum(batch_frame).tolist()
-        n = silho.size(0)
+        # n = silho.size(0)
         x = silho.unsqueeze(2)
         del silho
 

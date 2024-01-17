@@ -6,6 +6,7 @@ import torch.nn.functional as F
 class TripletLoss(nn.Module):
     def __init__(self, batch_size, hard_or_full, margin):
         super(TripletLoss, self).__init__()
+        self.hard_or_full = hard_or_full
         self.batch_size = batch_size
         self.margin = margin
 
@@ -38,7 +39,8 @@ class TripletLoss(nn.Module):
 
         return full_loss_metric_mean, hard_loss_metric_mean, mean_dist, full_loss_num
 
-    def batch_dist(self, x):
+    @staticmethod
+    def batch_dist(x):
         x2 = torch.sum(x ** 2, 2)
         dist = x2.unsqueeze(2) + x2.unsqueeze(2).transpose(1, 2) - 2 * torch.matmul(x, x.transpose(1, 2))
         dist = torch.sqrt(F.relu(dist))

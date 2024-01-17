@@ -101,28 +101,28 @@ class Model:
             gpu_num = min(torch.cuda.device_count(), batch_size)
             batch_per_gpu = math.ceil(batch_size / gpu_num)
             batch_frames = [[
-                                len(frame_sets[i])
-                                for i in range(batch_per_gpu * _, batch_per_gpu * (_ + 1))
-                                if i < batch_size
-                                ] for _ in range(gpu_num)]
+                len(frame_sets[i])
+                for i in range(batch_per_gpu * _, batch_per_gpu * (_ + 1))
+                if i < batch_size
+            ] for _ in range(gpu_num)]
             if len(batch_frames[-1]) != batch_per_gpu:
                 for _ in range(batch_per_gpu - len(batch_frames[-1])):
                     batch_frames[-1].append(0)
             max_sum_frame = np.max([np.sum(batch_frames[_]) for _ in range(gpu_num)])
             seqs = [[
-                        np.concatenate([
-                                           seqs[i][j]
-                                           for i in range(batch_per_gpu * _, batch_per_gpu * (_ + 1))
-                                           if i < batch_size
-                                           ], 0) for _ in range(gpu_num)]
-                    for j in range(feature_num)]
+                np.concatenate([
+                    seqs[i][j]
+                    for i in range(batch_per_gpu * _, batch_per_gpu * (_ + 1))
+                    if i < batch_size
+                ], 0) for _ in range(gpu_num)]
+                for j in range(feature_num)]
             seqs = [np.asarray([
-                                   np.pad(seqs[j][_],
-                                          ((0, max_sum_frame - seqs[j][_].shape[0]), (0, 0), (0, 0)),
-                                          'constant',
-                                          constant_values=0)
-                                   for _ in range(gpu_num)])
-                    for j in range(feature_num)]
+                np.pad(seqs[j][_],
+                       ((0, max_sum_frame - seqs[j][_].shape[0]), (0, 0), (0, 0)),
+                       'constant',
+                       constant_values=0)
+                for _ in range(gpu_num)])
+                for j in range(feature_num)]
             batch[4] = np.asarray(batch_frames)
 
         batch[0] = seqs
