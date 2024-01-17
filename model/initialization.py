@@ -2,7 +2,7 @@
 # @Author  : admin
 # @Time    : 2018/11/15
 import os
-from os.path import dirname, join
+import os.path as osp
 from copy import deepcopy
 
 import numpy as np
@@ -44,6 +44,7 @@ def initialize_model(config, train_source, test_source):
         model_config['hard_or_full_trip'],
         model_config['frame_num'],
     ]))
+    model_param["device"] = config["device"]
 
     m = Model(**model_param)
     print("Model initialization complete.")
@@ -53,7 +54,10 @@ def initialize_model(config, train_source, test_source):
 def initialization(config, train=False, test=False):
     print("Initialzing...")
     WORK_PATH = config['WORK_PATH']
-    path = join(dirname(dirname(__file__)), WORK_PATH)
+    if not osp.isabs(WORK_PATH):
+        path = osp.abspath(osp.join(osp.dirname(osp.dirname(__file__)), WORK_PATH))
+    else:
+        path = WORK_PATH
     os.chdir(path)
     os.environ["CUDA_VISIBLE_DEVICES"] = config["CUDA_VISIBLE_DEVICES"]
     train_source, test_source = initialize_data(config, train, test)

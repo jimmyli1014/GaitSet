@@ -12,6 +12,9 @@ def load_data(dataset_path, resolution, dataset, pid_num, pid_shuffle, cache=Tru
     seq_type = list()
     label = list()
 
+    if not osp.isabs(dataset_path):
+        dataset_path = osp.abspath(osp.join(osp.dirname(osp.dirname(osp.dirname(__file__))), dataset_path))
+
     for _label in sorted(list(os.listdir(dataset_path))):
         # In CASIA-B, data of subject #5 is incomplete.
         # Thus, we ignore it in training.

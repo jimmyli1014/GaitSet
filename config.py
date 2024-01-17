@@ -1,6 +1,7 @@
 conf = {
     "WORK_PATH": "./work",
     "CUDA_VISIBLE_DEVICES": "0,1,2,3",
+    "device": "cuda",
     "data": {
         'dataset_path': "your_dataset_path",
         'resolution': '64',

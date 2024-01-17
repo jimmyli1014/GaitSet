@@ -3,16 +3,16 @@ import torch.nn.functional as F
 import numpy as np
 
 
-def cuda_dist(x, y):
-    x = torch.from_numpy(x).cuda()
-    y = torch.from_numpy(y).cuda()
+def device_dist(x, y, device):
+    x = torch.from_numpy(x).to(device)
+    y = torch.from_numpy(y).to(device)
     dist = torch.sum(x ** 2, 1).unsqueeze(1) + torch.sum(y ** 2, 1).unsqueeze(
         1).transpose(0, 1) - 2 * torch.matmul(x, y.transpose(0, 1))
     dist = torch.sqrt(F.relu(dist))
     return dist
 
 
-def evaluation(data, config):
+def evaluation(data, config, device):
     dataset = config['dataset'].split('-')[0]
     feature, view, seq_type, label = data
     label = np.array(label)
@@ -40,7 +40,7 @@ def evaluation(data, config):
                     probe_x = feature[pseq_mask, :]
                     probe_y = label[pseq_mask]
 
-                    dist = cuda_dist(probe_x, gallery_x)
+                    dist = device_dist(probe_x, gallery_x, device)
                     idx = dist.sort(1)[1].cpu().numpy()
                     acc[p, v1, v2, :] = np.round(
                         np.sum(np.cumsum(np.reshape(probe_y, [-1, 1]) == gallery_y[idx[:, 0:num_rank]], 1) > 0,

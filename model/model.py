@@ -32,6 +32,7 @@ class Model:
                  model_name,
                  train_source,
                  test_source,
+                 device,
                  img_size=64):
 
         self.save_name = save_name
@@ -51,15 +52,15 @@ class Model:
 
         self.restore_iter = restore_iter
         self.total_iter = total_iter
-
+        self.device = device
         self.img_size = img_size
 
         self.encoder = SetNet(self.hidden_dim).float()
         self.encoder = nn.DataParallel(self.encoder)
         self.triplet_loss = TripletLoss(self.P * self.M, self.hard_or_full_trip, self.margin).float()
         self.triplet_loss = nn.DataParallel(self.triplet_loss)
-        self.encoder.cuda()
-        self.triplet_loss.cuda()
+        self.encoder.to(device)
+        self.triplet_loss.to(device)
 
         self.optimizer = optim.Adam([
             {'params': self.encoder.parameters()},
@@ -98,7 +99,11 @@ class Model:
         if self.sample_type == 'random':
             seqs = [np.asarray([seqs[i][j] for i in range(batch_size)]) for j in range(feature_num)]
         else:
-            gpu_num = min(torch.cuda.device_count(), batch_size)
+            # compatible for different devices
+            if self.device == "cuda":
+                gpu_num = min(torch.cuda.device_count(), batch_size)
+            else:
+                gpu_num = 1
             batch_per_gpu = math.ceil(batch_size / gpu_num)
             batch_frames = [[
                 len(frame_sets[i])
@@ -214,9 +219,8 @@ class Model:
             if self.restore_iter == self.total_iter:
                 break
 
-    @staticmethod
-    def ts2var(x):
-        return autograd.Variable(x).cuda()
+    def ts2var(self, x):
+        return autograd.Variable(x).to(self.device)
 
     def np2var(self, x):
         return self.ts2var(torch.from_numpy(x))
@@ -269,7 +273,7 @@ class Model:
     def load(self, restore_iter):
         self.encoder.load_state_dict(torch.load(osp.join(
             'checkpoint', self.model_name,
-            '{}-{:0>5}-encoder.ptm'.format(self.save_name, restore_iter))))
+            '{}-{:0>5}-encoder.ptm'.format(self.save_name, restore_iter)), map_location=self.device))
         self.optimizer.load_state_dict(torch.load(osp.join(
             'checkpoint', self.model_name,
-            '{}-{:0>5}-optimizer.ptm'.format(self.save_name, restore_iter))))
+            '{}-{:0>5}-optimizer.ptm'.format(self.save_name, restore_iter)), map_location=self.device))

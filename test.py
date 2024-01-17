@@ -2,6 +2,7 @@ from datetime import datetime
 import numpy as np
 import argparse
 
+import torch.cuda
 from numpy import ndarray
 
 from model.initialization import initialization
@@ -34,6 +35,11 @@ def de_diag(acc, each_angle=False):
     return result
 
 
+# check if cuda is available
+if conf["device"] == "cuda" and not torch.cuda.is_available():
+    print("* CUDA is not available, use CPU instead *")
+    conf["device"] = "cpu"
+
 m = initialization(conf, test=opt.cache)[0]
 
 # load model checkpoint of iteration opt.iter
@@ -43,7 +49,7 @@ print('Transforming...')
 time = datetime.now()
 test = m.transform('test', opt.batch_size)
 print('Evaluating...')
-acc = evaluation(test, conf['data'])
+acc = evaluation(test, conf['data'], conf["device"])
 print('Evaluation complete. Cost:', datetime.now() - time)
 
 # Print rank-1 accuracy of the best model
