@@ -2,7 +2,7 @@
 # @Author  : admin
 # @Time    : 2018/11/15
 import os
-from os.path import dirname, abspath
+from os.path import dirname, join
 from copy import deepcopy
 
 import numpy as np
@@ -53,7 +53,7 @@ def initialize_model(config, train_source, test_source):
 def initialization(config, train=False, test=False):
     print("Initialzing...")
     WORK_PATH = config['WORK_PATH']
-    path = abspath(dirname(dirname(__file__)) + WORK_PATH)
+    path = join(dirname(dirname(__file__)), WORK_PATH)
     os.chdir(path)
     os.environ["CUDA_VISIBLE_DEVICES"] = config["CUDA_VISIBLE_DEVICES"]
     train_source, test_source = initialize_data(config, train, test)
