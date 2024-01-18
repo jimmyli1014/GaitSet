@@ -1,3 +1,34 @@
+### What's New In This Fork
+
+1. Adapt new version of PyTorch & other required packages
+
+2. Add CPU & DirectML support (you can also try on other devices)
+
+### Installation
+
+1. Python 3.6+
+
+2. PyTorch
+
+   **Original code is tested on PyTorch 0.4. This fork is adapted on newer version & tested on 2.0+**
+
+   * For CPU & CUDA: You can refer to https://pytorch.org/get-started/locally/, and setup environment correctly.
+
+   * DirectML: Currently `torch-directml` just support Python <= 3.10,
+   Pytorch 1.13 / 2.0 (`pytorch-directml` for PyTorch 1.8 is deprecated).
+   You need to uninstall unsupported version & run the following command to install `torch-directml`.
+   It will install supported version of PyTorch directly.
+      ```
+      pip install torch-directml
+      ```
+
+3. Install Required Packages
+    ```
+    pip install -r requirements.txt
+    ```
+
+---
+
 # GaitSet
 
 [![LICENSE](https://img.shields.io/badge/license-NPL%20(The%20996%20Prohibited%20License)-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
@@ -30,16 +61,6 @@ The code and checkpoint for OUMVLP dataset have been released.
 See [OUMVLP](#oumvlp) for details.
 
 ## Getting started
-### Installation
-
-1. Install Pytorch: Note that you need to install the specified version to use CUDA. See https://pytorch.org/get-started/locally/
-
-&emsp;&emsp;Original code is tested on version 0.4, and this fork is tested on new version 2.1.2
-
-2. Install Required Packages: NumPy, Scipy, OpenCV-Python, XArray. Or you can run
-```
-pip install -r requirements.txt
-``` 
 
 ### Dataset & Preparation
 Download [CASIA-B Dataset](http://www.cbsr.ia.ac.cn/english/Gait%20Databases.asp)
