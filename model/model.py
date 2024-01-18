@@ -271,9 +271,14 @@ class Model:
 
     # restore_iter: iteration index of the checkpoint to load
     def load(self, restore_iter):
+        # adapt for DirectML
+        if self.device == torch.device("privateuseone:0"):
+            device = "cpu"
+        else:
+            device = self.device
         self.encoder.load_state_dict(torch.load(osp.join(
             'checkpoint', self.model_name,
-            '{}-{:0>5}-encoder.ptm'.format(self.save_name, restore_iter)), map_location=self.device))
+            '{}-{:0>5}-encoder.ptm'.format(self.save_name, restore_iter)), map_location=device))
         self.optimizer.load_state_dict(torch.load(osp.join(
             'checkpoint', self.model_name,
-            '{}-{:0>5}-optimizer.ptm'.format(self.save_name, restore_iter)), map_location=self.device))
+            '{}-{:0>5}-optimizer.ptm'.format(self.save_name, restore_iter)), map_location=device))

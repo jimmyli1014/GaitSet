@@ -35,10 +35,18 @@ def de_diag(acc, each_angle=False):
     return result
 
 
-# check if cuda is available
-if conf["device"] == "cuda" and not torch.cuda.is_available():
+# check if device is available
+if conf["device"] == "cuda" and not torch.cuda.is_available():  # CUDA
     print("* CUDA is not available, use CPU instead *")
     conf["device"] = "cpu"
+elif conf["device"] == "dml":   # DirectML
+    import torch_directml
+    if torch_directml.is_available():
+        dml = torch_directml.device()
+        conf["device"] = dml
+    else:
+        print("* DirectML is not available, use CPU instead *")
+        conf["device"] = "cpu"
 
 m = initialization(conf, test=opt.cache)[0]
 
