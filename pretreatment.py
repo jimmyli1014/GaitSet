@@ -3,7 +3,6 @@
 # @Time    : 2018/12/19
 
 import os
-from scipy import misc as scisc
 import cv2
 import numpy as np
 from warnings import warn
@@ -57,7 +56,8 @@ def log2str(pid, comment, logs):
         logs = [logs]
     for log in logs:
         str_log += "# JOB %d : --%s-- %s\n" % (
-            pid, comment, log)
+            pid, comment, log
+        )
     return str_log
 
 
@@ -77,7 +77,8 @@ def cut_img(img, seq_info, frame_name, pid):
     # might be not valid for identification.
     if img.sum() <= 10000:
         message = 'seq:%s, frame:%s, no data, %d.' % (
-            '-'.join(seq_info), frame_name, img.sum())
+            '-'.join(seq_info), frame_name, img.sum()
+        )
         warn(message)
         log_print(pid, WARNING, message)
         return None
@@ -101,7 +102,8 @@ def cut_img(img, seq_info, frame_name, pid):
             break
     if x_center < 0:
         message = 'seq:%s, frame:%s, no center.' % (
-            '-'.join(seq_info), frame_name)
+            '-'.join(seq_info), frame_name
+        )
         warn(message)
         log_print(pid, WARNING, message)
         return None
@@ -132,12 +134,13 @@ def cut_pickle(seq_info, pid):
         if img is not None:
             # Save the cut img
             save_path = os.path.join(out_dir, _frame_name)
-            scisc.imsave(save_path, img)
+            cv2.imsave(save_path, img)
             count_frame += 1
     # Warn if the sequence contains less than 5 frames
     if count_frame < 5:
         message = 'seq:%s, less than 5 valid data.' % (
-            '-'.join(seq_info))
+            '-'.join(seq_info)
+        )
         warn(message)
         log_print(pid, WARNING, message)
 
@@ -154,8 +157,8 @@ print('Pretreatment Start.\n'
       'Input path: %s\n'
       'Output path: %s\n'
       'Log file: %s\n'
-      'Worker num: %d' % (
-          INPUT_PATH, OUTPUT_PATH, LOG_PATH, WORKERS))
+      'Worker num: %d' % (INPUT_PATH, OUTPUT_PATH, LOG_PATH, WORKERS)
+      )
 
 id_list = os.listdir(INPUT_PATH)
 id_list.sort()
@@ -170,10 +173,7 @@ for _id in id_list:
             seq_info = [_id, _seq_type, _view]
             out_dir = os.path.join(OUTPUT_PATH, *seq_info)
             os.makedirs(out_dir)
-            results.append(
-                pool.apply_async(
-                    cut_pickle,
-                    args=(seq_info, pid)))
+            results.append(pool.apply_async(cut_pickle, args=(seq_info, pid)))
             sleep(0.02)
             pid += 1
 
@@ -189,7 +189,6 @@ while unfinish > 0:
                 unfinish += 1
                 continue
             else:
-                print('\n\n\nERROR OCCUR: PID ##%d##, ERRORTYPE: %s\n\n\n',
-                      i, type(e))
+                print('\n\n\nERROR OCCUR: PID ##%d##, ERRORTYPE: %s\n\n\n', i, type(e))
                 raise e
 pool.join()
